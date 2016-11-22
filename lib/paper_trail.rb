@@ -94,6 +94,17 @@ module PaperTrail
       paper_trail_store[:whodunnit]
     end
 
+    # Allow to be passed a block during which someone else is
+    # marked as having made the change
+    # @api public
+    def blaming(value, &_block)
+      old_value = paper_trail_store[:whodunnit]
+      self.whodunnit = value
+      yield
+    ensure
+      self.whodunnit = old_value
+    end
+
     # Sets any information from the controller that you want PaperTrail to
     # store.  By default this is set automatically by a before filter.
     # @api public

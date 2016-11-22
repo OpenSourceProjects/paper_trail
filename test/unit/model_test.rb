@@ -637,6 +637,15 @@ class HasPaperTrailModelTest < ActiveSupport::TestCase
         @version = @widget.versions.last # only 1 version
       end
 
+      should "be passed a block" do
+        PaperTrail.blaming("Max") { @widget.update_attributes!(name: SecureRandom.hex) }
+        @version = @widget.versions.last # only 1 version
+        assert_equal "Max", @version.whodunnit
+        @widget.update_attributes!(name: SecureRandom.hex)
+        @version = @widget.versions.last # only 1 version
+        assert_equal "Alice", @version.whodunnit
+      end
+
       should "track who made the change" do
         assert_equal "Alice", @version.whodunnit
         assert_nil @version.paper_trail_originator

@@ -696,6 +696,15 @@ widget.update_attributes :name => 'Wibble'
 widget.versions.last.whodunnit              # Andy Stewart
 ```
 
+alternatively, pass a block to alter `whodunnit` for some context:
+
+```ruby
+PaperTrail.blaming('Andy Stewart') do
+	widget.update_attributes :name => 'Wibble'
+end
+widget.versions.last.whodunnit              # Andy Stewart
+```
+
 If your controller has a `current_user` method, PaperTrail provides a
 `before_action` that will assign `current_user.id` to `PaperTrail.whodunnit`.
 You can add this `before_action` to your `ApplicationController`.
